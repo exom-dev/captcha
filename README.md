@@ -2,4 +2,4 @@
 
 This project was created by [The Exom Developers](https://github.com/exom-dev).
 
-The Id project is licensed under the [MIT](https://github.com/exom-dev/captcha/blob/master/LICENSE) license.
+The Captcha project is licensed under the [MIT](https://github.com/exom-dev/captcha/blob/master/LICENSE) license.
