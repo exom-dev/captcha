@@ -6,7 +6,7 @@
   "keywords": [
     "express",
     "captcha",
-    "recaptcha",
+    "captcha-image",
     "bruteforce-protection",
     "anti-spam-bot"
   ],
