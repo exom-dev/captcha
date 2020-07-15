@@ -1,35 +1,32 @@
 {
-  "name": "@exom-dev/captcha",
+  "name": "@exom-dev/recaptcha",
   "version": "0.1.0",
   "main": "index.js",
   "description": "Anti-robot challenges for Express.js",
   "keywords": [
     "express",
     "captcha",
+    "recaptcha",
     "bruteforce-protection",
-    "anti-spam-bot",
-    "challenge"
+    "anti-spam-bot"
   ],
   "author": "The Exom Developers (https://github.com/exom-dev)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exom-dev/captcha.git"
+    "url": "git+https://github.com/exom-dev/recaptcha.git"
   },
-  "homepage": "https://github.com/exom-dev/captcha",
+  "homepage": "https://github.com/exom-dev/recaptcha",
   "bugs": {
-    "url": "https://github.com/exom-dev/captcha/issues"
+    "url": "https://github.com/exom-dev/recaptcha/issues"
   },
   "scripts": {
-    "git:pull": "git pull https://github.com/exom-dev/captcha master",
-    "git:push": "git push https://github.com/exom-dev/captcha master"
+    "git:pull": "git pull https://github.com/exom-dev/recaptcha master",
+    "git:push": "git push https://github.com/exom-dev/recaptcha master"
   },
   "publishConfig": {
     "access": "public"
   },
   "license": "MIT",
-  "dependencies": {
-    "canvas": "^2.6.1",
-    "express": "^4.17.1"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }
