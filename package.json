@@ -4,7 +4,11 @@
   "main": "index.js",
   "description": "Anti-robot challenges for Express.js",
   "keywords": [
-    "express"
+    "express",
+    "captcha",
+    "bruteforce-protection",
+    "anti-spam-bot",
+    "challenge"
   ],
   "author": "The Exom Developers (https://github.com/exom-dev)",
   "repository": {
@@ -23,6 +27,9 @@
     "access": "public"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "express": "^4.17.1"
+  },
   "devDependencies": {}
 }
