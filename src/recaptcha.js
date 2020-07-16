@@ -2,7 +2,7 @@ const uuid = require('uuid');
 
 class Recaptcha {
   constructor() {
-    this.data = {};
+    this.dataset = {};
     this.captcha = {};
   }
 
@@ -22,12 +22,15 @@ class Recaptcha {
     }
 
     this.captcha[id] = {
+      generatedAt: null,
       puzzleAnswer: null,
       puzzleData: null,
+      puzzleExample: null,
       puzzleQuestion: null,
-      revokedAt: null,
       solvedAt: null,
     };
+
+    return id;
   }
 
   generatePuzzle(id) {
@@ -38,16 +41,17 @@ class Recaptcha {
     }
   }
 
-  revoke(id) {
-    if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
-      this.captcha[id].revokedAt = new Date();
-    } else {
-      throw 'Captcha id from .revoke(id) doesn\'t exist.';
+  setOptions(options) {
+    if (!(options && (typeof options === 'object'))) {
+      throw `Invalid argument 'options' (expected: object | found: ${typeof(options)})`;
     }
-  }
 
-  setData(data) {
-    this.data = data;
+    if (
+      Object.prototype.hasOwnProperty.call(options, 'dataset')
+      && ((typeof options.dataset) === "object")
+    ) {
+      this.dataset = options.dataset;
+    }
   }
 
   verify(request, response, next) {
