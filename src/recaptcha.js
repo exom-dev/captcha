@@ -46,9 +46,9 @@ class Recaptcha {
   generatePuzzle(id) {
     if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
       
-    } else {
-      throw 'Captcha id from .generatePuzzle(id) doesn\'t exist.';
     }
+  
+    throw 'EXM_RECAPTCHA_ID_NOT_FOUND';
   }
 
   sample() {
@@ -73,26 +73,61 @@ class Recaptcha {
     const app = express.Router();
   
     app.post('/id', (request, response) => {
-      response.json({
-        data: this.generateId(),
-        statusCode: 201
-      });
+      response.json(this.generateId());
     });
+
+    const validation = {
+      answer: (request, response, next) => {
+        if (Object.prototype.hasOwnProperty.call(request.body, 'answer') === false) {
+          return response.json({ status: 'EXM_RECAPTCHA_ANSWER_EMPTY' });
+        }
+
+        if (!(request.body.answer instanceof Array)) {
+          return response.json({ status: 'EXM_RECAPTCHA_ANSWER_INVALID' });
+        }
+
+        next();
+      },
+      id: (request, response, next) => {
+        if (Object.prototype.hasOwnProperty.call(request.body, 'id') === false) {
+          return response.json({ status: 'EXM_RECAPTCHA_ID_EMPTY' });
+        }
+
+        if ((typeof request.body.id) !== 'string') {
+          return response.json({ status: 'EXM_RECAPTCHA_ID_INVALID' });
+        }
+
+        next();
+      }
+    };
+
+    app.post('/puzzle', validation.id, (request, response) => {
+      const puzzle = this.generatePuzzle(request.body.id);
+      puzzle.status = 'EXM_RECAPTCHA_OK';
+
+      response.json(puzzle);
+    });
+
+    app.post('/solve', validation.id, validation.answer, (request, response) => {
+      try {
+        const solve = this.solvePuzzle(request.body.id);
+        solve.status = 'EXM_RECAPTCHA_OK';
   
-    app.post('/puzzle', (request, response) => {
-      response.json({
-        data: this.generatePuzzle(request.body.id),
-        statusCode: 201
-      });
+        response.json(solve);
+      } catch (error) {
+        response.json({ status: error });
+      }
     });
-  
-    app.post('/solve', (request, response) => {
-      
-    });
+
+    return app;
   }
 
-  solve(id, answer) {
-
+  solvePuzzle(id, answer) {
+    if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
+      
+    }
+  
+    throw 'EXM_RECAPTCHA_ID_NOT_FOUND';
   }
 }
 
