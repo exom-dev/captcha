@@ -2,7 +2,10 @@ const uuid = require('uuid');
 
 class Recaptcha {
   constructor() {
-    this.dataset = {};
+    this.options = {
+      dataset: [],
+    };
+  
     this.captcha = {};
   }
 
@@ -24,9 +27,9 @@ class Recaptcha {
     this.captcha[id] = {
       generatedAt: null,
       puzzleAnswer: null,
+      puzzleCategory: null,
       puzzleData: null,
       puzzleExample: null,
-      puzzleQuestion: null,
       solvedAt: null,
     };
 
@@ -46,11 +49,8 @@ class Recaptcha {
       throw `Invalid argument 'options' (expected: object | found: ${typeof(options)})`;
     }
 
-    if (
-      Object.prototype.hasOwnProperty.call(options, 'dataset')
-      && ((typeof options.dataset) === "object")
-    ) {
-      this.dataset = options.dataset;
+    if (Object.prototype.hasOwnProperty.call(options, 'dataset') && (options.dataset instanceof Array)) {
+      this.options.dataset = options.dataset;
     }
   }
 
