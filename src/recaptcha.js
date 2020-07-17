@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { difference, filter, flatMap, has, isArray, isEqual, isNumber, isObject, now, random, sampleSize, sortBy } = require('lodash');
 const uuid = require('uuid');
 
 class Recaptcha {
@@ -12,7 +12,7 @@ class Recaptcha {
   }
 
   check(id) {
-    if (_.has(this.captcha, id) === false) {
+    if (has(this.captcha, id) === false) {
       throw "Invalid argument 'id' not found.";
     }
 
@@ -20,7 +20,7 @@ class Recaptcha {
       return false;
     }
 
-    if (this.captcha[id].solvedAt + this.options.expires <= _.now()) {
+    if (this.captcha[id].solvedAt + this.options.expires <= now()) {
       return false;
     }
 
@@ -31,7 +31,7 @@ class Recaptcha {
   generate() {
     const id = uuid.v4();
 
-    if (_.has(this.captcha, id)) {
+    if (has(this.captcha, id)) {
       return this.generate();
     }
 
@@ -48,7 +48,7 @@ class Recaptcha {
   }
 
   regenerate(id) {
-    if (_.has(this.captcha, id) === false) {
+    if (has(this.captcha, id) === false) {
       throw "Invalid argument 'id' not found.";
     }
 
@@ -56,33 +56,33 @@ class Recaptcha {
       throw "Please specify a dataset before generating captchas.";
     }
 
-    this.captcha[id].generatedAt = _.now();
+    this.captcha[id].generatedAt = now();
 
-    const index = _.random(this.options.dataset.length);
+    const index = random(this.options.dataset.length);
     const group = this.options.dataset[index];
 
     this.captcha[id].category = group.category;
     
-    this.captcha[id].answer = _.sampleSize(group.data, _.random(2, 6));
-    this.captcha[id].answer = _.sortBy(this.captcha[id].answer);
+    this.captcha[id].answer = sampleSize(group.data, random(2, 6));
+    this.captcha[id].answer = sortBy(this.captcha[id].answer);
 
-    const example = _.difference(group.data, this.captcha[id].answer);
-    this.captcha[id].example = _.sampleSize(example, 3);
+    const example = difference(group.data, this.captcha[id].answer);
+    this.captcha[id].example = sampleSize(example, 3);
 
-    let data = _.filter(this.options.dataset, (_, jindex) => jindex !== index);
-    data = _.flatMap(data, (group) => group.data);
+    let data = filter(this.options.dataset, (_, jindex) => jindex !== index);
+    data = flatMap(data, (group) => group.data);
   
-    this.captcha[id].data = _.sampleSize(data, 9 - this.captcha[id].answer.length);
+    this.captcha[id].data = sampleSize(data, 9 - this.captcha[id].answer.length);
     return this.captcha[id];
   }
 
   setOptions(options) {
-    if (_.isObject(options) === false) {
+    if (isObject(options) === false) {
       throw `Invalid argument 'options' (expected: object | found: ${typeof(options)})`;
     }
 
-    if (_.has(options, 'dataset')) {
-      if (_.isArray(options.dataset) === false) {
+    if (has(options, 'dataset')) {
+      if (isArray(options.dataset) === false) {
         throw `Invalid argument 'options.dataset' (expected: array | found: ${typeof(options.dataset)})`;
       }
 
@@ -91,15 +91,15 @@ class Recaptcha {
       }
   
       for (const [index, item] of this.options.dataset) {
-        if (_.isObject(item) === false) {
+        if (isObject(item) === false) {
           throw `Invalid argument 'options.dataset[${index}]' (expected: object | found: ${typeof(item)})`;
         }
 
-        if (_.has(item, 'category') === false) {
+        if (has(item, 'category') === false) {
           throw `Invalid argument 'options.dataset[${index}].category' (expected: string | found: ${typeof(item.category)})`;
         }
 
-        if (_.has(item, 'data') === false) {
+        if (has(item, 'data') === false) {
           throw `Invalid argument 'options.dataset[${index}].data' (expected: array | found: ${typeof(item.data)})`;
         }
 
@@ -111,16 +111,16 @@ class Recaptcha {
       this.options.dataset = options.dataset;
     }
 
-    if (_.has(options, 'expires')) {
-      if (_.isNumber(options.expires) === false) {
+    if (has(options, 'expires')) {
+      if (isNumber(options.expires) === false) {
         throw `Invalid argument 'options.expires' (expected: number | found: ${typeof(options.expires)})`;
       }
 
       this.options.expires = options.expires;
     }
 
-    if (_.has(options, 'solveIn')) {
-      if (_.isNumber(options.solveIn) === false) {
+    if (has(options, 'solveIn')) {
+      if (isNumber(options.solveIn) === false) {
         throw `Invalid argument 'options.solveIn' (expected: number | found: ${typeof(options.solveIn)})`;
       }
 
@@ -129,16 +129,16 @@ class Recaptcha {
   }
 
   solve(id, answer) {
-    if (_.has(this.captcha, id) === false) {
+    if (has(this.captcha, id) === false) {
       throw "Invalid argument 'id' not found.";
     }
 
-    if (this.captcha[id].generatedAt + this.options.solveIn <= _.now()) {
+    if (this.captcha[id].generatedAt + this.options.solveIn <= now()) {
       return false;
     }
 
-    if (_.isEqual(this.captcha[id].answer, _.sortBy(answer))) {
-      this.captcha[id].solvedAt = _.now();
+    if (isEqual(this.captcha[id].answer, sortBy(answer))) {
+      this.captcha[id].solvedAt = now();
       return true;
     }
   
