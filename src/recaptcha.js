@@ -1,133 +1,102 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs-extra');
+const _ = require('lodash');
 const uuid = require('uuid');
 
 class Recaptcha {
   constructor() {
     this.captcha = {};
-
-    const samplePath = path.join(__dirname, '../dataset/sample/sample.json');
-    this.dataset = fs.readJsonSync(samplePath);
+    this.options = {
+      dataset: [],
+      expires: 1000 * 30,
+      solveIn: 1000 * 60,
+    };
   }
 
   check(id) {
-    
+    if (_.has(this.captcha, id) === false) {
+      throw "Invalid argument 'id' not found.";
+    }
+
+    if (this.captcha[id].solvedAt === null) {
+      return false;
+    }
+
+    if (this.captcha[id].solvedAt + this.options.expires <= _.now()) {
+      return false;
+    }
+
+    delete this.captcha[id];
+    return true;
   }
 
-  client() {
-    const app = express.Router();
-    const clientDir = path.join(__dirname, '../client');
-    
-    app.use(express.static(clientDir));
-    return app;
-  }
+  generate() {
+    const id = uuid.v4();
 
-  generateId() {
-    let id = uuid.v4();
-
-    if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
-      return this.generateId();
+    if (_.has(this.captcha, id)) {
+      return this.generate();
     }
 
     this.captcha[id] = {
       generatedAt: null,
-      puzzleAnswer: null,
-      puzzleCategory: null,
-      puzzleData: null,
-      puzzleExample: null,
+      answer: null,
+      category: null,
+      data: null,
+      example: null,
       solvedAt: null,
-      verified: false,
     };
 
-    return id;
+    return this.regenerate(id);
   }
 
-  generatePuzzle(id) {
-    if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
-      
+  regenerate(id) {
+    if (_.has(this.captcha, id) === false) {
+      throw "Invalid argument 'id' not found.";
     }
-  
-    throw 'EXM_RECAPTCHA_ID_NOT_FOUND';
-  }
 
-  sample() {
-    const app = express.Router();
+    if (this.options.dataset.length < 2) {
+      throw "Dataset should have at least 2 groups.";
+    }
+
+    for (const group of this.options.dataset) {
+      if (group.data.length < 12) {
+        throw "Dataset group data should have at least 12 values";
+      }
+    }
+
+    this.captcha[id].generatedAt = _.now();
+
+    const index = _.random(this.options.dataset.length);
+    const group = this.options.dataset[index];
+
+    this.captcha[id].category = group.category;
     
-    app.get('/:image', async (request, response, next) => {
-      const sampleDir = path.join(__dirname, '../dataset/sample');
-      const imagePath = path.join(sampleDir, request.params.image);
+    this.captcha[id].answer = _.sampleSize(group.data, _.random(2, 6));
+    this.captcha[id].answer = _.sortBy(this.captcha[id].answer);
 
-      if (request.params.image !== 'sample.json' && (await fs.pathExists(imagePath))) {
-        response.contentType('image/png');
-        fs.createReadStream(imagePath).pipe(response);
-      } else {
-        next();
-      }
-    });
+    const example = _.difference(group.data, this.captcha[id].answer);
+    this.captcha[id].example = _.sampleSize(example, 3);
 
-    return app;
+    let data = _.filter(this.options.dataset, (_, jindex) => jindex !== index);
+    data = _.flatMap(data, (group) => group.data);
+  
+    this.captcha[id].data = _.sampleSize(data, 9 - this.captcha[id].answer.length);
+    return this.captcha[id];
   }
 
-  server() {
-    const app = express.Router();
-  
-    app.post('/id', (request, response) => {
-      response.json(this.generateId());
-    });
+  solve(id, answer) {
+    if (_.has(this.captcha, id) === false) {
+      throw "Invalid argument 'id' not found.";
+    }
 
-    const validation = {
-      answer: (request, response, next) => {
-        if (Object.prototype.hasOwnProperty.call(request.body, 'answer') === false) {
-          return response.json({ status: 'EXM_RECAPTCHA_ANSWER_EMPTY' });
-        }
+    if (this.captcha[id].generatedAt + this.options.solveIn <= _.now()) {
+      return false;
+    }
 
-        if (!(request.body.answer instanceof Array)) {
-          return response.json({ status: 'EXM_RECAPTCHA_ANSWER_INVALID' });
-        }
-
-        next();
-      },
-      id: (request, response, next) => {
-        if (Object.prototype.hasOwnProperty.call(request.body, 'id') === false) {
-          return response.json({ status: 'EXM_RECAPTCHA_ID_EMPTY' });
-        }
-
-        if ((typeof request.body.id) !== 'string') {
-          return response.json({ status: 'EXM_RECAPTCHA_ID_INVALID' });
-        }
-
-        next();
-      }
-    };
-
-    app.post('/puzzle', validation.id, (request, response) => {
-      const puzzle = this.generatePuzzle(request.body.id);
-      puzzle.status = 'EXM_RECAPTCHA_OK';
-
-      response.json(puzzle);
-    });
-
-    app.post('/solve', validation.id, validation.answer, (request, response) => {
-      try {
-        const solve = this.solvePuzzle(request.body.id);
-        solve.status = 'EXM_RECAPTCHA_OK';
-  
-        response.json(solve);
-      } catch (error) {
-        response.json({ status: error });
-      }
-    });
-
-    return app;
-  }
-
-  solvePuzzle(id, answer) {
-    if (Object.prototype.hasOwnProperty.call(this.captcha, id)) {
-      
+    if (_.isEqual(this.captcha[id].answer, _.sortBy(answer))) {
+      this.captcha[id].solvedAt = _.now();
+      return true;
     }
   
-    throw 'EXM_RECAPTCHA_ID_NOT_FOUND';
+    return false;
   }
 }
 
