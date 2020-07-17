@@ -11,9 +11,9 @@ class Recaptcha {
     };
   }
 
-  check(id) {
+  consume(id) {
     if (has(this.captcha, id) === false) {
-      throw "Invalid argument 'id' not found.";
+      throw `Captcha with id '${id}' was not found`;
     }
 
     if (this.captcha[id].solvedAt === null) {
@@ -49,11 +49,11 @@ class Recaptcha {
 
   regenerate(id) {
     if (has(this.captcha, id) === false) {
-      throw "Invalid argument 'id' not found.";
+      throw `Captcha with id '${id}' was not found`;
     }
 
     if (this.options.dataset === null) {
-      throw "Please specify a dataset before generating captchas.";
+      throw "Cannot generate captchas without a dataset";
     }
 
     const index = random(this.options.dataset.length);
@@ -86,7 +86,7 @@ class Recaptcha {
       }
 
       if (options.dataset.length < 2) {
-        throw "Dataset should have at least 2 items.";
+        throw "Dataset should have at least 2 items";
       }
   
       for (const [index, item] of this.options.dataset) {
@@ -129,7 +129,7 @@ class Recaptcha {
 
   solve(id, answer) {
     if (has(this.captcha, id) === false) {
-      throw "Invalid argument 'id' not found.";
+      throw `Captcha with id '${id}' was not found`;
     }
 
     if (this.captcha[id].generatedAt + this.options.solveIn <= now()) {
