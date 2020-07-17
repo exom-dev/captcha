@@ -2,7 +2,6 @@ class Recaptcha {
   constructor(options) {
     this.options = {
       dataset: '/',
-      element: null,
       endpoint: '/',
       expires: 1000 * 30,
       id: Date.now().toString(),
@@ -10,27 +9,77 @@ class Recaptcha {
       solveIn: 1000 * 60,
     }
 
+    this.checkbox = null;
+    this.dropdown = null;
+    this.element = null;
+
     this.setOptions(options);
   }
 
   init(wrapper) {
     wrapper.insertAdjacentHTML('beforeBegin', `
-      <div class="exm-recaptcha" exm-recaptcha="${this.options.id}" exm-recaptcha-status="idle">
+      <div class="exm-recaptcha" id="exm-recaptcha-${this.options.id}">
         <input name="${this.options.name}" type="hidden" />
         <label class="exm-recaptcha__im-not-robot">  
           <input class="exm-recaptcha__im-not-robot__checkbox" type="checkbox" required />
           I'm not a robot
         </label>
-        <div class="exm-recaptcha__credits">
-          <a class="exm-recaptcha__credits__link" href="https://github.com/exom-dev/recaptcha" target="_blanc">ReCaptcha</a>
-          powered by
-          <a class="exm-recaptcha__credits__link" href="https://github.com/exom-dev" target="_blanc">Exom Dev</a>
-        </div>
       </div>
     `);
   
     wrapper.parentElement.removeChild(wrapper);
-    this.element = document.querySelector(`[exm-recaptcha="${this.options.id}"]`);
+    this.element = document.getElementById(`exm-recaptcha-${this.options.id}`);
+    this.element.removeAttribute('id');
+
+    document.onclick = () => {
+      if (this.dropdown !== null) {
+        this.close();
+      };
+    };
+
+    this.checkbox = this.element.querySelector('input[type="checkbox"]');
+    this.checkbox.onclick = (event) => {
+      if (this.checkbox.checked) {
+        event.stopPropagation();
+        this.checkbox.checked = false;
+        this.open();
+      } else {
+        this.checkbox.checked = true;
+      }
+    };
+
+    this.open();
+  }
+
+  open() {
+    if (this.dropdown === null) {
+      this.checkbox.indeterminate = true;
+  
+      this.element.insertAdjacentHTML('beforeEnd', `
+        <div class="exm-recaptcha__dropdown" id="exm-recaptcha-${this.options.id}">
+          <div class="exm-recaptcha__dropdown__header">
+            Please click each image containing a
+            <b class="exm-recaptcha__dropdown__header__category">crosswalk</b>
+          </div>
+        </div>
+      `);
+
+      this.dropdown = document.getElementById(`exm-recaptcha-${this.options.id}`);
+      this.dropdown.removeAttribute('id');
+  
+      this.dropdown.onclick = (event) => {
+        event.stopPropagation();
+      };
+    }
+  }
+
+  close() {
+    this.checkbox.indeterminate = false;
+
+    if (this.dropdown !== null) {
+      this.dropdown.parentElement.removeChild(this.dropdown);
+      this.dropdown = null;
+    }
   }
 
   setOptions(options) {
