@@ -1,8 +1,12 @@
 const Recaptcha = require('./src/recaptcha.js');
-const server = require('./src/server.js');
-
 module.exports = new Recaptcha();
-module.exports.server = server;
+
+module.exports.dataset = {
+  image: require('./src/dataset-image.js'),
+  sample: require('./src/dataset-sample.js'),
+};
+
+module.exports.server = require('./src/server.js');
 
 /*
 const app = require('express')();
