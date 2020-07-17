@@ -1,6 +1,7 @@
 const Recaptcha = require('./src/recaptcha.js');
 module.exports = new Recaptcha();
 
+/*
 const app = require('express')();
 
 app.use('/recaptcha/dataset', module.exports.sample());
@@ -12,3 +13,4 @@ app.get('/', (req, res) => {
 });
 
 app.listen(80);
+*/

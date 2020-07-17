@@ -103,7 +103,7 @@ class Recaptcha {
         }
 
         if (item.data.length < 12) {
-          throw `Dataset item options.dataset[${index}].data should have at least 12 items.`;
+          throw `Dataset item options.dataset[${index}].data should have at least 12 items`;
         }
       }
 
