@@ -5,7 +5,7 @@ class Recaptcha {
   constructor() {
     this.captcha = {};
     this.options = {
-      dataset: [],
+      dataset: null,
       expires: 1000 * 30,
       solveIn: 1000 * 60,
     };
@@ -52,14 +52,8 @@ class Recaptcha {
       throw "Invalid argument 'id' not found.";
     }
 
-    if (this.options.dataset.length < 2) {
-      throw "Dataset should have at least 2 groups.";
-    }
-
-    for (const group of this.options.dataset) {
-      if (group.data.length < 12) {
-        throw "Dataset group data should have at least 12 values";
-      }
+    if (this.options.dataset === null) {
+      throw "Please specify a dataset before generating captchas.";
     }
 
     this.captcha[id].generatedAt = _.now();
@@ -80,6 +74,58 @@ class Recaptcha {
   
     this.captcha[id].data = _.sampleSize(data, 9 - this.captcha[id].answer.length);
     return this.captcha[id];
+  }
+
+  setOptions(options) {
+    if (_.isObject(options) === false) {
+      throw `Invalid argument 'options' (expected: object | found: ${typeof(options)})`;
+    }
+
+    if (_.has(options, 'dataset')) {
+      if (_.isArray(options.dataset) === false) {
+        throw `Invalid argument 'options.dataset' (expected: array | found: ${typeof(options.dataset)})`;
+      }
+
+      if (options.dataset.length < 2) {
+        throw "Dataset should have at least 2 items.";
+      }
+  
+      for (const [index, item] of this.options.dataset) {
+        if (_.isObject(item) === false) {
+          throw `Invalid argument 'options.dataset[${index}]' (expected: object | found: ${typeof(item)})`;
+        }
+
+        if (_.has(item, 'category') === false) {
+          throw `Invalid argument 'options.dataset[${index}].category' (expected: string | found: ${typeof(item.category)})`;
+        }
+
+        if (_.has(item, 'data') === false) {
+          throw `Invalid argument 'options.dataset[${index}].data' (expected: array | found: ${typeof(item.data)})`;
+        }
+
+        if (item.data.length < 12) {
+          throw `Dataset item options.dataset[${index}].data should have at least 12 items.`;
+        }
+      }
+
+      this.options.dataset = options.dataset;
+    }
+
+    if (_.has(options, 'expires')) {
+      if (_.isNumber(options.expires) === false) {
+        throw `Invalid argument 'options.expires' (expected: number | found: ${typeof(options.expires)})`;
+      }
+
+      this.options.expires = options.expires;
+    }
+
+    if (_.has(options, 'solveIn')) {
+      if (_.isNumber(options.solveIn) === false) {
+        throw `Invalid argument 'options.solveIn' (expected: number | found: ${typeof(options.solveIn)})`;
+      }
+
+      this.options.solveIn = options.solveIn;
+    }
   }
 
   solve(id, answer) {
