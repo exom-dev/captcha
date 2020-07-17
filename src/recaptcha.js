@@ -56,12 +56,8 @@ class Recaptcha {
       throw "Please specify a dataset before generating captchas.";
     }
 
-    this.captcha[id].generatedAt = now();
-
     const index = random(this.options.dataset.length);
     const group = this.options.dataset[index];
-
-    this.captcha[id].category = group.category;
     
     this.captcha[id].answer = sampleSize(group.data, random(2, 6));
     this.captcha[id].answer = sortBy(this.captcha[id].answer);
@@ -73,6 +69,9 @@ class Recaptcha {
     data = flatMap(data, (group) => group.data);
   
     this.captcha[id].data = sampleSize(data, 9 - this.captcha[id].answer.length);
+    this.captcha[id].category = group.category;
+    
+    this.captcha[id].generatedAt = now();
     return this.captcha[id];
   }
 
