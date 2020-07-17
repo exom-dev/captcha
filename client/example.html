@@ -1,19 +1,35 @@
 <!doctype html>
 <html>
   <head>
-    <link href="/r/client/recaptcha.css" rel="stylesheet" type="text/css" />
+    <link href="/recaptcha/client/normalize.min.css" rel="stylesheet" type="text/css" />
+    <link href="/recaptcha/client/recaptcha.css" rel="stylesheet" type="text/css" />
+
+    <style>
+      body {
+        padding: 40px;
+      }
+    </style>
   </head>
   <body>
     <form method="get">
-      <input type="text" placeholder="username" />
+      <input type="text" name="username" placeholder="username" />
       <br />
-      <input type="password" placeholder="password" />
+      <input type="password" name="password" placeholder="password" />
+      <br />
       <br />
       <div id="recaptcha"></div>
       <br />
       <input type="submit" />
     </form>
 
-    <script src="/r/client/recaptcha.js"></script>
+    <script src="/recaptcha/client/recaptcha.js"></script>
+    <script>
+      const recaptcha = new Recaptcha({
+        dataset: "/recaptcha/dataset",
+        endpoint: "/recaptcha/server",
+      });
+
+      recaptcha.init(document.getElementById('recaptcha'));
+    </script>
   </body>
 </html>

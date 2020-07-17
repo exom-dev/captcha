@@ -1,0 +1,67 @@
+.exm-recaptcha {
+  align-items: center;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  display: flex;
+  height: 70px;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 240px;
+}
+
+.exm-recaptcha__im-not-robot {
+  flex: 1;
+}
+
+.exm-recaptcha__im-not-robot__label:hover,
+.exm-recaptcha__im-not-robot__label__checkbox:hover {
+  cursor: pointer;
+}
+
+.exm-recaptcha__im-not-robot__label {
+  align-items: center;
+  color: #333333;
+  display: flex;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  width: fit-content;
+}
+
+.exm-recaptcha__im-not-robot__label:hover {
+  color: #111111;
+}
+
+.exm-recaptcha__im-not-robot__label__checkbox {
+  margin-right: 10px;
+}
+
+.exm-recaptcha__brand {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.exm-recaptcha__brand__logo {
+  height: auto;
+  width: 40px;
+}
+
+.exm-recaptcha__brand__footer {
+  margin-top: 2px;
+  width: 100%;
+}
+
+.exm-recaptcha__brand__footer__link {
+  color: #333333;
+  font-family: sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.exm-recaptcha__brand__footer__link:hover {
+  color: #111111;
+}
