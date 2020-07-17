@@ -102,8 +102,8 @@ class Recaptcha {
           throw `Invalid argument 'options.dataset[${index}].data' (expected: array | found: ${typeof(item.data)})`;
         }
 
-        if (item.data.length < 12) {
-          throw `Dataset item options.dataset[${index}].data should have at least 12 items`;
+        if (item.data.length < 9) {
+          throw `Dataset item options.dataset[${index}].data should have at least 9 items`;
         }
       }
 
