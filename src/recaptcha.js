@@ -89,7 +89,7 @@ class Recaptcha {
         throw "Dataset should have at least 2 items";
       }
   
-      for (const [index, item] of this.options.dataset) {
+      for (const [index, item] of options.dataset.entries()) {
         if (isObject(item) === false) {
           throw `Invalid argument 'options.dataset[${index}]' (expected: object | found: ${typeof(item)})`;
         }
