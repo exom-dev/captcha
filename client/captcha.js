@@ -52,7 +52,6 @@ class ExmCaptcha extends HTMLElement {
 
     this.tryAgain = false;
     this.init();
-    this.dropdownOpen();
   }
 
   async generate() {
@@ -97,6 +96,7 @@ class ExmCaptcha extends HTMLElement {
       clearInterval(this.solveTimeout);
     }
 
+    this.tryAgain = false;
     this.checkbox.indeterminate = false;
 
     if (this.dropdown !== null) {
@@ -171,15 +171,7 @@ class ExmCaptcha extends HTMLElement {
                 Try again
               </div>
               `
-              : `
-              <a
-                class="exm-captcha__dropdown__footer__item__link"
-                href="https://github.com/exom-dev"
-                target="_blanc"
-              >
-                The Exom Developers
-              </a>
-              `
+              : ''
           }
           </div>
           <div class="exm-captcha__dropdown__footer__item">
