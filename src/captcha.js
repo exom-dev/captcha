@@ -1,7 +1,7 @@
 const { difference, filter, flatMap, has, isArray, isEqual, isNumber, isObject, now, random, sampleSize, sortBy } = require('lodash');
 const uuid = require('uuid');
 
-class Recaptcha {
+class Captcha {
   constructor() {
     this.captcha = {};
     this.options = {
@@ -145,4 +145,4 @@ class Recaptcha {
   }
 }
 
-module.exports = Recaptcha;
+module.exports = Captcha;

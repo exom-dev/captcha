@@ -1,24 +1,24 @@
-class Recaptcha {
+class Captcha {
   constructor(options) {
     this.options = {
       dataset: '/',
       endpoint: '/',
       expires: 1000 * 30,
-      id: Date.now().toString(),
-      name: 'exm-recaptcha',
+      name: 'exm-captcha',
       solveIn: 1000 * 60,
     }
 
     this.checkbox = null;
     this.dropdown = null;
     this.element = null;
+    this.id = Date.now().toString();
 
     this.setOptions(options);
   }
 
   init(wrapper) {
     wrapper.insertAdjacentHTML('beforeBegin', `
-      <div class="exm-recaptcha" id="exm-recaptcha-${this.options.id}">
+      <div class="exm-recaptcha" id="exm-recaptcha-${this.id}">
         <input name="${this.options.name}" type="hidden" />
         <label class="exm-recaptcha__im-not-robot">  
           <input class="exm-recaptcha__im-not-robot__checkbox" type="checkbox" required />
@@ -28,7 +28,7 @@ class Recaptcha {
     `);
   
     wrapper.parentElement.removeChild(wrapper);
-    this.element = document.getElementById(`exm-recaptcha-${this.options.id}`);
+    this.element = document.getElementById(`exm-recaptcha-${this.id}`);
     this.element.removeAttribute('id');
 
     document.onclick = () => {
@@ -47,8 +47,6 @@ class Recaptcha {
         this.checkbox.checked = true;
       }
     };
-
-    this.open();
   }
 
   open() {
@@ -56,15 +54,16 @@ class Recaptcha {
       this.checkbox.indeterminate = true;
   
       this.element.insertAdjacentHTML('beforeEnd', `
-        <div class="exm-recaptcha__dropdown" id="exm-recaptcha-${this.options.id}">
+        <div class="exm-recaptcha__dropdown" id="exm-recaptcha-${this.id}">
           <div class="exm-recaptcha__dropdown__header">
             Please click each image containing a
             <b class="exm-recaptcha__dropdown__header__category">crosswalk</b>
           </div>
+
         </div>
       `);
 
-      this.dropdown = document.getElementById(`exm-recaptcha-${this.options.id}`);
+      this.dropdown = document.getElementById(`exm-recaptcha-${this.id}`);
       this.dropdown.removeAttribute('id');
   
       this.dropdown.onclick = (event) => {

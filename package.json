@@ -1,5 +1,5 @@
 {
-  "name": "@exom-dev/recaptcha",
+  "name": "@exom-dev/captcha",
   "version": "0.1.0",
   "main": "index.js",
   "description": "Anti-robot challenges for Express.js",
@@ -13,15 +13,15 @@
   "author": "The Exom Developers (https://github.com/exom-dev)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exom-dev/recaptcha.git"
+    "url": "git+https://github.com/exom-dev/captcha.git"
   },
-  "homepage": "https://github.com/exom-dev/recaptcha",
+  "homepage": "https://github.com/exom-dev/captcha",
   "bugs": {
-    "url": "https://github.com/exom-dev/recaptcha/issues"
+    "url": "https://github.com/exom-dev/captcha/issues"
   },
   "scripts": {
-    "git:pull": "git pull https://github.com/exom-dev/recaptcha master",
-    "git:push": "git push https://github.com/exom-dev/recaptcha master"
+    "git:pull": "git pull https://github.com/exom-dev/captcha master",
+    "git:push": "git push https://github.com/exom-dev/captcha master"
   },
   "publishConfig": {
     "access": "public"

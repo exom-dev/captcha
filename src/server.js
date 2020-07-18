@@ -2,15 +2,15 @@ const express = require('express');
 const app = express.Router();
 
 const { isArray } = require('lodash');
-const recaptcha = require('../index');
+const captcha = require('../index');
 
 app.post('/', (request, response) => {
-  response.json(recaptcha.generate());
+  response.json(captcha.generate());
 });
 
 app.post('/:id', (request, response) => {
   const id = request.params.id;
-  response.json(recaptcha.regenerate(id));
+  response.json(captcha.regenerate(id));
 });
 
 app.post('/:id/solve', (request, response) => {
@@ -21,7 +21,7 @@ app.post('/:id/solve', (request, response) => {
   }
 
   const id = request.params.id;
-  response.json(recaptcha.solve(id, answer));
+  response.json(captcha.solve(id, answer));
 });
 
 module.exports = app;

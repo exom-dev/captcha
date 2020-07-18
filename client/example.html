@@ -1,8 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <link href="/recaptcha/client/normalize.min.css" rel="stylesheet" type="text/css" />
-    <link href="/recaptcha/client/recaptcha.css" rel="stylesheet" type="text/css" />
+    <link href="/captcha/client/captcha.css" rel="stylesheet" type="text/css" />
 
     <style>
       body {
@@ -18,19 +17,20 @@
       <input type="password" name="password" placeholder="password" />
       <br />
       <br />
-      <div id="recaptcha"></div>
+      <exm-captcha></exm-captcha>
+      <div id="captcha"></div>
       <br />
       <input type="submit" />
     </form>
 
-    <script src="/recaptcha/client/recaptcha.js"></script>
+    <script src="/captcha/client/captcha.js"></script>
     <script>
-      const recaptcha = new Recaptcha({
-        dataset: "/recaptcha/dataset",
-        endpoint: "/recaptcha/server",
+      const captcha = new Captcha({
+        dataset: "/captcha/dataset",
+        endpoint: "/captcha/server",
       });
 
-      recaptcha.init(document.getElementById('recaptcha'));
+      captcha.init(document.getElementById('captcha'));
     </script>
   </body>
 </html>
