@@ -5,12 +5,18 @@ const { isArray } = require('lodash');
 const captcha = require('../index');
 
 app.post('/', (request, response) => {
-  response.json(captcha.generate());
+  const puzzle = captcha.generate();
+  delete puzzle.answer;
+
+  response.json(puzzle);
 });
 
 app.post('/:id', (request, response) => {
   const id = request.params.id;
-  response.json(captcha.regenerate(id));
+  const puzzle = captcha.regenerate(id);
+  
+  delete puzzle.answer;
+  response.json(puzzle);
 });
 
 app.post('/:id/solve', (request, response) => {

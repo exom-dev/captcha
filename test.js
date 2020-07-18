@@ -1,10 +1,10 @@
 const app = require('express')();
 
 const captcha = require('./index.js');
-captcha.setOptions({ dataset: captcha.dataset });
+captcha.setOptions({ dataset: captcha.dataset.sample });
 
-app.use('/captcha/client', captcha.client);
-app.use('/captcha/dataset', captcha.dataset.image);
-app.use('/captcha/server', captcha.server);
+app.use('/captcha', captcha.client);
+app.use('/captcha', captcha.server);
+app.use('/captcha', captcha.dataset);
 
 app.listen(80);

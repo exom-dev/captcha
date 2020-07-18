@@ -11,9 +11,9 @@ app.get('/:image', async (request, response, next) => {
   if (await fs.pathExists(image)) {
     response.contentType('image/png');
     fs.createReadStream(image).pipe(response);
+  } else {
+    next();
   }
-
-  next();
 });
 
 module.exports = app;

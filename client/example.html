@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <link href="/captcha/client/captcha.css" rel="stylesheet" type="text/css" />
+    <link href="/captcha/captcha.css" rel="stylesheet" type="text/css" />
 
     <style>
       body {
@@ -14,23 +14,18 @@
       <input type="text" name="username" placeholder="username" />
       <br />
       <br />
-      <input type="password" name="password" placeholder="password" />
+      <input type="password" name="password" placeholder="password" autocomplete="off" />
       <br />
       <br />
-      <exm-captcha></exm-captcha>
-      <div id="captcha"></div>
+      <label>
+        <exm-captcha></exm-captcha>
+        I'm not a robot
+      </label>
+      <br />
       <br />
       <input type="submit" />
     </form>
 
-    <script src="/captcha/client/captcha.js"></script>
-    <script>
-      const captcha = new Captcha({
-        dataset: "/captcha/dataset",
-        endpoint: "/captcha/server",
-      });
-
-      captcha.init(document.getElementById('captcha'));
-    </script>
+    <script src="/captcha/captcha.js"></script>
   </body>
 </html>

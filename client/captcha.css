@@ -1,8 +1,40 @@
-.exm-recaptcha {
+exm-captcha {
   position: relative;
   width: fit-content;
 }
 
+exm-captcha .exm-captcha__checkbox {
+  cursor: pointer;
+  margin: 0;
+}
+
+exm-captcha .exm-captcha__dropdown {
+  background: #ffffff;
+  border: 1px solid black;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  top: calc(100% + 10px);
+  width: 400px;
+}
+
+exm-captcha .exm-captcha__dropdown--is-loading {
+  opacity: 0.5;
+}
+
+exm-captcha .exm-captcha__dropdown__header {
+  color: #444444;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+exm-captcha .exm-captcha__dropdown__example {
+  display: flex;
+}
+
+/*
 .exm-recaptcha__im-not-robot {
   align-items: center;
   color: #444444;
@@ -50,3 +82,4 @@
 .exm-recaptcha__dropdown__header__category {
   font-weight: 600;
 }
+*/

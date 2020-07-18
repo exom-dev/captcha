@@ -1,4 +1,4 @@
-const { difference, filter, flatMap, has, isArray, isEqual, isNumber, isObject, now, random, sampleSize, sortBy } = require('lodash');
+const { concat, difference, filter, flatMap, has, isArray, isEqual, isNumber, isObject, now, random, sampleSize, sortBy, shuffle } = require('lodash');
 const uuid = require('uuid');
 
 class Captcha {
@@ -36,11 +36,12 @@ class Captcha {
     }
 
     this.captcha[id] = {
-      generatedAt: null,
       answer: null,
       category: null,
       data: null,
       example: null,
+      generatedAt: null,
+      id,
       solvedAt: null,
     };
 
@@ -56,7 +57,7 @@ class Captcha {
       throw "Cannot generate captchas without a dataset";
     }
 
-    const index = random(this.options.dataset.length);
+    const index = random(this.options.dataset.length - 1);
     const group = this.options.dataset[index];
     
     this.captcha[id].answer = sampleSize(group.data, random(2, 6));
@@ -69,9 +70,12 @@ class Captcha {
     data = flatMap(data, (group) => group.data);
   
     this.captcha[id].data = sampleSize(data, 9 - this.captcha[id].answer.length);
+    this.captcha[id].data = concat(this.captcha[id].data, this.captcha[id].answer);
+    this.captcha[id].data = shuffle(this.captcha[id].data);
+
     this.captcha[id].category = group.category;
-    
     this.captcha[id].generatedAt = now();
+    
     return this.captcha[id];
   }
 
