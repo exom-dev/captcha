@@ -62,13 +62,12 @@ exm-captcha .exm-captcha__dropdown__data__image--is-selected {
 
 exm-captcha .exm-captcha__dropdown__footer {
   display: flex;
-  margin-top: 20px;
   padding: 5px;
   width: 100%;
 }
 
 exm-captcha .exm-captcha__dropdown__footer__item {
-  align-items: center;
+  align-items: flex-end;
   display: flex;
   flex: 1;
 }
@@ -82,8 +81,9 @@ exm-captcha .exm-captcha__dropdown__footer__item:nth-child(3) {
 }
 
 exm-captcha .exm-captcha__dropdown__footer__item__button {
-  border: 1px solid #333333;
+  border: 0;
   border-radius: 2px;
+  box-shadow: 1px 1px 1px #0000002f;
   color: #333333;
   cursor: pointer;
   font-family: sans-serif;
@@ -107,6 +107,10 @@ exm-captcha .exm-captcha__dropdown__footer__item__link {
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
+}
+
+exm-captcha .exm-captcha__dropdown__footer__item__link {
+  cursor: pointer;
 }
 
 exm-captcha .exm-captcha__dropdown__footer__item__error {

@@ -52,6 +52,7 @@ class ExmCaptcha extends HTMLElement {
 
     this.tryAgain = false;
     this.init();
+    this.dropdownOpen();
   }
 
   async generate() {
@@ -158,9 +159,9 @@ class ExmCaptcha extends HTMLElement {
         </div>
         <div class="exm-captcha__dropdown__footer">
           <div class="exm-captcha__dropdown__footer__item">
-            <button class="exm-captcha__dropdown__footer__item__button" type="button">
+            <a class="exm-captcha__dropdown__footer__item__link">
               Reload (${this.options.solveIn / 1000}s)
-            </button>
+            </a>
           </div>
           <div class="exm-captcha__dropdown__footer__item">
           ${
