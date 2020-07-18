@@ -1,21 +1,25 @@
 const express = require('express');
 const app = express.Router();
 
-const { isArray } = require('lodash');
+const { cloneDeep, isArray } = require('lodash');
 const captcha = require('../index');
 
 app.post('/', (request, response) => {
-  const puzzle = captcha.generate();
+  const puzzle = cloneDeep(captcha.generate());
+
   delete puzzle.answer;
+  delete puzzle.solvedAt;
 
   response.json(puzzle);
 });
 
 app.post('/:id', (request, response) => {
   const id = request.params.id;
-  const puzzle = captcha.regenerate(id);
+  const puzzle = cloneDeep(captcha.regenerate(id));
   
   delete puzzle.answer;
+  delete puzzle.solvedAt;
+  
   response.json(puzzle);
 });
 

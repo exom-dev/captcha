@@ -6,8 +6,8 @@ class Captcha {
     this.captcha = {};
     this.options = {
       dataset: null,
-      expires: 1000 * 30,
-      solveIn: 1000 * 60,
+      expires: 1000 * 60,
+      solveIn: 1000 * 30,
     };
   }
 
@@ -75,8 +75,17 @@ class Captcha {
 
     this.captcha[id].category = group.category;
     this.captcha[id].generatedAt = now();
-    
+  
+    this.captcha[id].solvedAt = null;
     return this.captcha[id];
+  }
+
+  revoke(id) {
+    if (has(this.captcha, id) === false) {
+      throw `Captcha with id '${id}' was not found`;
+    }
+
+    this.captcha[id].generatedAt = 0;
   }
 
   setOptions(options) {
@@ -137,6 +146,7 @@ class Captcha {
     }
 
     if (this.captcha[id].generatedAt + this.options.solveIn <= now()) {
+      this.revoke(id);
       return false;
     }
 
@@ -145,6 +155,7 @@ class Captcha {
       return true;
     }
   
+    this.revoke(id);
     return false;
   }
 }

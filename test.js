@@ -1,4 +1,7 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
+
+app.use(express.json());
 
 const captcha = require('./index.js');
 captcha.setOptions({ dataset: captcha.dataset.sample });
